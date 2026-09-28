@@ -13,6 +13,10 @@ CLASES = {1: ("clase01", "Números Reales e Irracionales: propiedades y racional
           2: ("clase02", "Logaritmos: concepto, operatoria y propiedades"),
           3: ("clase03", "Porcentajes avanzados e interés compuesto")}
 LEVELS = [("principiante", 0), ("avanzado", 1), ("experto", 2)]
+# Mini ensayos de cierre de unidad: semana -> (título, clases que integra)
+MINIS = {4: ("MINI ENSAYO: Números M2", [1, 2, 3])}
+TITULOS = {c: t for c, (_, t) in CLASES.items()}
+TITULOS.update({w: f"{t} + corrección" for w, (t, _) in MINIS.items()})
 
 
 def validate(bank, size):
@@ -42,26 +46,40 @@ def main(argv):
         assert contrast(fg, bg) >= 7, (fg, bg)
     for k, v in BRAND["levels"].items():
         assert contrast("#FFFFFF", v["color"]) >= 4.5, k
-    wanted = [int(a) for a in argv] or list(CLASES)
-    rows = []
+    wanted = [int(a) for a in argv] or list(CLASES) + list(MINIS)
     for c in wanted:
-        mod, tema = CLASES[c]
-        m = importlib.import_module(mod)
         d = DIST / f"clase-{c:02d}"
         d.mkdir(parents=True, exist_ok=True)
-        for key, lvl in LEVELS:
-            bank = gen_bank(m.BY_SKILL, lvl, 150, seed=c * 1000 + lvl)
-            validate(bank, 150)
-            html = page(f"Clase {c} · {BRAND['levels'][key]['name']}", key, f"Clase {c}: {tema}", bank, 10)
-            (d / f"{key}.html").write_text(html, encoding="utf-8")
-            print(f"clase-{c:02d}/{key}.html  {len(html)//1024} KB  banco={len(bank)}")
-            rows.append((c, tema, key))
-    rows = [(c, CLASES[c][1], k) for c in sorted(CLASES) for k, _ in LEVELS if (DIST / f"clase-{c:02d}" / f"{k}.html").exists()]
-    # índice secuencial: clase → nivel
-    items = "".join(f'<li>Clase {c}: {t} — ' + " · ".join(f'<a href="clase-{c:02d}/{k}.html">{BRAND["levels"][k]["name"]}</a>'
-                    for cc, tt, k in rows if cc == c) + "</li>" for c, t in sorted({(r[0], r[1]) for r in rows}))
-    (DIST / "index.html").write_text(f'<!doctype html><meta charset="utf-8"><title>PAES M2 · Evaluaciones</title>'
-                                     f'<body style="font-family:Arial;max-width:800px;margin:24px auto;line-height:1.8"><h1>PAES M2 · Evaluaciones</h1><ol>{items}</ol></body>', encoding="utf-8")
+        if c in CLASES:
+            m = importlib.import_module(CLASES[c][0])
+            for key, lvl in LEVELS:
+                bank = gen_bank(m.BY_SKILL, lvl, 150, seed=c * 1000 + lvl)
+                validate(bank, 150)
+                html = page(f"Clase {c} · {BRAND['levels'][key]['name']}", key, f"Clase {c}: {CLASES[c][1]}", bank, 10)
+                (d / f"{key}.html").write_text(html, encoding="utf-8")
+                print(f"clase-{c:02d}/{key}.html  {len(html)//1024} KB  banco={len(bank)}")
+        else:
+            titulo, clases = MINIS[c]
+            by = {}
+            for cl in clases:
+                for sk, fs in importlib.import_module(CLASES[cl][0]).BY_SKILL.items():
+                    by.setdefault(sk, []).extend(fs)
+            bank = gen_bank(by, 2, 250, seed=c * 1000 + 7)
+            validate(bank, 250)
+            html = page(f"Semana {c} · {titulo}", "mini", f"Semana {c}: {titulo} (20 preguntas)", bank, 20)
+            (d / "mini-ensayo.html").write_text(html, encoding="utf-8")
+            print(f"clase-{c:02d}/mini-ensayo.html  {len(html)//1024} KB  banco={len(bank)}")
+    # índice secuencial: clase/semana → nivel o tipo de evaluación
+    names = {k: BRAND["levels"][k]["name"] for k, _ in LEVELS}
+    names["mini-ensayo"] = BRAND["levels"]["mini"]["name"]
+    items = ""
+    for c in sorted(TITULOS):
+        links = [f'<a href="clase-{c:02d}/{k}.html">{n}</a>' for k, n in names.items() if (DIST / f"clase-{c:02d}" / f"{k}.html").exists()]
+        if links:
+            items += f"<li>Semana {c}: {TITULOS[c]} — " + " · ".join(links) + "</li>"
+    (DIST / "index.html").write_text('<!doctype html><meta charset="utf-8"><title>PAES M2 · Evaluaciones</title>'
+                                     '<body style="font-family:Arial;max-width:800px;margin:24px auto;line-height:1.8"><h1>PAES M2 · Evaluaciones</h1>'
+                                     f'<ol style="list-style:none;padding:0">{items}</ol></body>', encoding="utf-8")
 
 
 if __name__ == "__main__":
