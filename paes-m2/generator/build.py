@@ -9,7 +9,8 @@ LOGO = (ROOT / "assets" / "logo.svg").read_text(encoding="utf-8")
 TPL = (ROOT / "generator" / "template.html").read_text(encoding="utf-8")
 DIST = ROOT / "dist"
 
-CLASES = {1: ("clase01", "Números Reales e Irracionales: propiedades y racionalización")}
+CLASES = {1: ("clase01", "Números Reales e Irracionales: propiedades y racionalización"),
+          2: ("clase02", "Logaritmos: concepto, operatoria y propiedades")}
 LEVELS = [("principiante", 0), ("avanzado", 1), ("experto", 2)]
 
 
@@ -54,6 +55,7 @@ def main(argv):
             (d / f"{key}.html").write_text(html, encoding="utf-8")
             print(f"clase-{c:02d}/{key}.html  {len(html)//1024} KB  banco={len(bank)}")
             rows.append((c, tema, key))
+    rows = [(c, CLASES[c][1], k) for c in sorted(CLASES) for k, _ in LEVELS if (DIST / f"clase-{c:02d}" / f"{k}.html").exists()]
     # índice secuencial: clase → nivel
     items = "".join(f'<li>Clase {c}: {t} — ' + " · ".join(f'<a href="clase-{c:02d}/{k}.html">{BRAND["levels"][k]["name"]}</a>'
                     for cc, tt, k in rows if cc == c) + "</li>" for c, t in sorted({(r[0], r[1]) for r in rows}))
