@@ -10,7 +10,8 @@ TPL = (ROOT / "generator" / "template.html").read_text(encoding="utf-8")
 DIST = ROOT / "dist"
 
 CLASES = {1: ("clase01", "Números Reales e Irracionales: propiedades y racionalización"),
-          2: ("clase02", "Logaritmos: concepto, operatoria y propiedades")}
+          2: ("clase02", "Logaritmos: concepto, operatoria y propiedades"),
+          3: ("clase03", "Porcentajes avanzados e interés compuesto")}
 LEVELS = [("principiante", 0), ("avanzado", 1), ("experto", 2)]
 
 
