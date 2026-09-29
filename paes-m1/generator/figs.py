@@ -157,3 +157,39 @@ def grid_shaded(rows, cols, shaded, w=560, cell=36):
         for j in range(cols):
             body += R(x0 + j * cell, 16 + i * cell, cell, cell, FILL3 if i * cols + j < shaded else WHITE, NAVY, 2)
     return wrap(w, rows * cell + 32, body, "Cuadrícula con celdas sombreadas")
+
+
+PIE_COLS = ["#93C5FD", "#FDE68A", "#BBF7D0", "#FBCFE8", "#DDD6FE", "#FED7AA"]
+
+
+def pie_chart(parts, w=560, r=105):
+    """parts: [(rótulo, valor_texto, valor_numérico)]; sectores con píldoras de rótulo."""
+    import math
+    cx, cy = 280, 20 + r + 8
+    total = sum(p[2] for p in parts)
+    a = -math.pi / 2
+    body = ""
+    tags = ""
+    for i, (lab, txt, v) in enumerate(parts):
+        da = 2 * math.pi * v / total
+        a0, a1 = a, a + da
+        x0_, y0_ = cx + r * math.cos(a0), cy + r * math.sin(a0)
+        x1_, y1_ = cx + r * math.cos(a1), cy + r * math.sin(a1)
+        large = 1 if da > math.pi else 0
+        body += f'<path d="M {cx} {cy} L {x0_:.1f} {y0_:.1f} A {r} {r} 0 {large} 1 {x1_:.1f} {y1_:.1f} Z" fill="{PIE_COLS[i % 6]}" stroke="{NAVY}" stroke-width="2.5"/>'
+        am = (a0 + a1) / 2
+        rr = r * (0.62 if v / total > 0.12 else 0.74)
+        tags += tag(cx + rr * math.cos(am), cy + rr * math.sin(am), f"{lab} {txt}".strip(), 14)
+        a = a1
+    return wrap(w, 2 * r + 44, body + tags, "Gráfico circular")
+
+
+def hbars_pct(items, w=560, top=100):
+    """Barras horizontales: items [(rótulo, valor)], escala 0..top."""
+    body = ""
+    h = 24 + 52 * len(items)
+    for i, (lab, v) in enumerate(items):
+        y = 16 + 52 * i
+        body += T(120, y + 30, lab, 16, "end") + R(130, y, 380 * v / top, 40, FILL3) + tag(130 + 380 * v / top + 30, y + 20, f"{v}%", 15)
+    body += L(130, 10, 130, h - 10, INK, 2.5)
+    return wrap(w, h, body, "Barras horizontales con porcentajes")
