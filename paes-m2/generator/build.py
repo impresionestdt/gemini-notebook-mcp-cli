@@ -27,7 +27,8 @@ CLASES = {1: ("clase01", "Números Reales e Irracionales: propiedades y racional
           18: ("clase18", "Trigonometría básica: seno, coseno y tangente"),
           19: ("clase19", "Trigonometría: problemas 2D y 3D"),
           20: ("clase20", "Vectores en el plano cartesiano (R² y R³)"),
-          21: ("clase21", "Repaso Geometría M2: síntesis proporcional")}
+          21: ("clase21", "Repaso Geometría M2: síntesis proporcional"),
+          23: ("clase23", "Técnicas de conteo: principio multiplicativo y factoriales")}
 LEVELS = [("principiante", 0), ("avanzado", 1), ("experto", 2)]
 # Mini ensayos de cierre de unidad: semana -> (título, clases que integra)
 MINIS = {4: ("MINI ENSAYO: Números M2", [1, 2, 3]),
