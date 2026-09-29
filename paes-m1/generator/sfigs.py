@@ -107,3 +107,13 @@ def spinner(items, w=560, r=105):
         g += T(cx + r * 0.66 * math.cos(am), cy + r * 0.66 * math.sin(am) + 6, lab, 18)
     g += f'<polygon points="{cx},{cy - r - 4} {cx - 10},{cy - r - 24} {cx + 10},{cy - r - 24}" fill="{ACC}" stroke="{INK}" stroke-width="2"/>' + C(cx, cy, 7, INK)
     return wrap(w, 2 * r + 50, g, "Ruleta con sectores iguales")
+
+
+def venn(a_only, both, b_only, out, names=("A", "B"), w=560, hl=None):
+    """Diagrama de Venn con recuentos. hl: región resaltada 'A','B','AB','union' o None (solo sombrea el contorno)."""
+    g = R(40, 16, 480, 200, WHITE, NAVY, 3)
+    g += f'<circle cx="220" cy="116" r="78" fill="{FILL}" fill-opacity="0.85" stroke="{NAVY}" stroke-width="3"/>'
+    g += f'<circle cx="340" cy="116" r="78" fill="{FILL2}" fill-opacity="0.75" stroke="{NAVY}" stroke-width="3"/>'
+    g += T(160, 30, names[0], 18) if False else tag(150, 40, names[0], 16) + tag(410, 40, names[1], 16)
+    g += T(175, 124, str(a_only), 22) + T(280, 124, str(both), 22) + T(385, 124, str(b_only), 22) + T(485, 200, str(out), 20)
+    return wrap(w, 235, g, "Diagrama de Venn")
