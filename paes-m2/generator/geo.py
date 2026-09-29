@@ -81,3 +81,67 @@ def right_tri(p, q, labs, names=("A", "B", "C", "D")):
     body += tag(280 if False else (A[0] + B[0]) / 2, 280, labs.get("c", ""), 16) if labs.get("c") else ""
     body += letter(A[0] - 16, A[1] + 6, na) + letter(B[0] + 16, B[1] + 6, nb) + letter(Cp[0], Cp[1] - 16, nc) + letter(Dp[0] + 2, 225 + 26 if False else 246, nd, 18)
     return wrap(560, 300, body, "Triángulo rectángulo con la altura sobre la hipotenusa")
+
+
+def _tri_pts(x0, base, y0=215):
+    return (x0, y0), (x0 + base, y0), (x0 + 0.34 * base, y0 - 0.78 * base)
+
+
+def sim_tris(k, small, big, inside_s="", inside_b="", ttl=("", "")):
+    """Dos triángulos semejantes (razón visual limitada). small/big: dict(base, left, right) con textos."""
+    kv = min(float(k), 2.4)
+    bs = 110
+    bb = bs * kv
+    A1, B1, C1 = _tri_pts(40, bs)
+    A2, B2, C2 = _tri_pts(40 + bs + 60 + (300 - bb) * 0.0, bb)
+    A2 = (A2[0] + 30, A2[1]); B2 = (B2[0] + 30, B2[1]); C2 = (C2[0] + 30, C2[1])
+    body = P([A1, B1, C1], FILL) + P([A2, B2, C2], FILL2)
+    if small.get("base"): body += tag((A1[0] + B1[0]) / 2, 242, small["base"], 15)
+    if small.get("left"): body += tag(*shift(mid(A1, C1), -34, 0), small["left"], 15)
+    if small.get("right"): body += tag(*shift(mid(B1, C1), 34, 0), small["right"], 15)
+    if big.get("base"): body += tag((A2[0] + B2[0]) / 2, 242, big["base"], 15)
+    if big.get("left"): body += tag(*shift(mid(A2, C2), -34, 0), big["left"], 15)
+    if big.get("right"): body += tag(*shift(mid(B2, C2), 34, 0), big["right"], 15)
+    if inside_s: body += tag(C1[0], C1[1] - 26, inside_s, 15)
+    if inside_b: body += tag(C2[0], C2[1] - 26, inside_b, 15)
+    if ttl[0]: body += tag(A1[0] + 55, 22, ttl[0], 15)
+    if ttl[1]: body += tag(A2[0] + bb / 2, 22, ttl[1], 15)
+    return wrap(560, 262, body, "Dos triángulos semejantes")
+
+
+def cube(x, y, s, fill=FILL):
+    d = s * 0.38
+    return (R(x, y - s, s, s, fill) + P([(x, y - s), (x + d, y - s - d), (x + s + d, y - s - d), (x + s, y - s)], FILL3)
+            + P([(x + s, y - s), (x + s + d, y - s - d), (x + s + d, y - d), (x + s, y)], "#BFDBFE"))
+
+
+def two_cubes(k, lab_s, lab_b, info=("", "")):
+    kv = min(float(k), 2.6)
+    s1 = 60
+    s2 = s1 * kv
+    y = 215
+    body = cube(60, y, s1, FILL) + cube(60 + s1 + 90, y, s2, FILL2)
+    body += tag(60 + s1 / 2, y + 28, lab_s, 15) + tag(60 + s1 + 90 + s2 / 2, y + 28, lab_b, 15)
+    if info[0]: body += tag(60 + s1 / 2, 22, info[0], 15)
+    if info[1]: body += tag(60 + s1 + 90 + s2 / 2, 22, info[1], 15)
+    return wrap(560, 268, body, "Dos cubos semejantes")
+
+
+def two_discs(r1, r2, l1, l2, i1="", i2=""):
+    sc = 90 / max(r1, r2)
+    a, b = r1 * sc, r2 * sc
+    body = C(150, 140, a, FILL, NAVY, 4) + C(400, 140, b, FILL2, NAVY, 4)
+    body += tag(150, 250, l1, 15) + tag(400, 250, l2, 15)
+    if i1: body += tag(150, 24, i1, 15)
+    if i2: body += tag(400, 24, i2, 15)
+    return wrap(560, 275, body, "Dos círculos")
+
+
+def two_squares(k, lab_s, lab_b):
+    kv = min(float(k), 2.6)
+    s1 = 70
+    s2 = s1 * kv
+    y = 210
+    body = R(80, y - s1, s1, s1, FILL) + R(80 + s1 + 100, y - s2, s2, s2, FILL2)
+    body += tag(80 + s1 / 2, y + 28, lab_s, 15) + tag(80 + s1 + 100 + s2 / 2, y + 28, lab_b, 15)
+    return wrap(560, 270, body, "Dos cuadrados")
