@@ -346,3 +346,19 @@ def polygon_fig(pts, labels=None, fill=None, w=560, h=280, unit_scale=None):
     for (px, py) in P_:
         body += C(px, py, 4, INK, INK, 1)
     return wrap(w, h + 30, body, "Figura plana con las medidas de sus lados")
+
+
+def cylinder_fig(r_lab, h_lab, w=560, hollow=False, fill_frac=None):
+    """Cilindro con radio y altura rotulados; fill_frac (0-1) sombrea el nivel de líquido."""
+    cx, top, hgt, rx, ry = 280, 60, 130, 80, 22
+    body = ""
+    if fill_frac is not None:
+        ly = top + hgt * (1 - fill_frac)
+        body += f'<path d="M {cx - rx} {ly} L {cx - rx} {top + hgt} A {rx} {ry} 0 0 0 {cx + rx} {top + hgt} L {cx + rx} {ly} A {rx} {ry} 0 0 1 {cx - rx} {ly} Z" fill="#93C5FD" stroke="none"/>'
+    body += f'<path d="M {cx - rx} {top} L {cx - rx} {top + hgt} A {rx} {ry} 0 0 0 {cx + rx} {top + hgt} L {cx + rx} {top}" fill="{FILL if fill_frac is None else "none"}" stroke="{NAVY}" stroke-width="4"/>'
+    body += f'<ellipse cx="{cx}" cy="{top}" rx="{rx}" ry="{ry}" fill="{FILL2 if fill_frac is None else "#F8FAFC"}" stroke="{NAVY}" stroke-width="4"/>'
+    if r_lab:
+        body += L(cx, top, cx + rx, top, ACC, 3.5) + C(cx, top, 4, INK, INK, 1) + tag(cx + rx / 2, top - 22, r_lab, 15)
+    if h_lab:
+        body += L(cx + rx + 26, top, cx + rx + 26, top + hgt, INK, 2.5) + tag(cx + rx + 26 + 44, top + hgt / 2, h_lab, 15)
+    return wrap(w, 250, body, "Cilindro con su radio y su altura")
