@@ -1,6 +1,6 @@
 """Genera los HTML de evaluación. Uso: python3 build.py [clase ...]  (por defecto: todas las disponibles)"""
 import json, sys, importlib, pathlib, itertools
-from common import gen_bank, check_lengths, SKILLS
+from common import gen_bank, check_lengths, norm, SKILLS
 from svgkit import TEXT_ON, contrast
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -32,7 +32,8 @@ CLASES = {1: ("clase01", "Números Reales e Irracionales: propiedades y racional
           24: ("clase24", "Permutaciones y combinatorias"),
           25: ("clase25", "Probabilidad condicional: tablas de doble entrada y espacio muestral reducido"),
           26: ("clase26", "Medidas de dispersión: rango, varianza y desviación estándar"),
-          27: ("clase27", "Propiedades de las medidas de dispersión")}
+          27: ("clase27", "Propiedades de las medidas de dispersión"),
+          30: ("clase30", "Corrección integral y estrategias finales: análisis de distractores")}
 LEVELS = [("principiante", 0), ("avanzado", 1), ("experto", 2)]
 # Mini ensayos de cierre de unidad: semana -> (título, clases que integra)
 MINIS = {4: ("MINI ENSAYO: Números M2", [1, 2, 3]),
@@ -78,7 +79,7 @@ def main(argv):
         d.mkdir(parents=True, exist_ok=True)
         if c == FINAL_WEEK:
             # todo el temario: cada clase aporta por igual (round-robin entre clases dentro de cada habilidad)
-            per_class = {cl: importlib.import_module(CLASES[cl][0]).BY_SKILL for cl in CLASES}
+            per_class = {cl: norm(importlib.import_module(CLASES[cl][0]).BY_SKILL) for cl in CLASES}
             by = {}
             for sk in SKILLS:
                 lists = [per_class[cl][sk] for cl in CLASES if sk in per_class[cl]]

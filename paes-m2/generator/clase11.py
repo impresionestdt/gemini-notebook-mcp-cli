@@ -357,9 +357,10 @@ def t_inverse(r, l):
                 "Se pasa a forma exponencial, se despeja x y se intercambian las variables.")
 
 
+import clase10 as _c10
 BY_SKILL = {
     Q_RES: [t_params, t_ineq],
-    Q_MOD: [t_doubling, t_decibel],
+    Q_MOD: [t_doubling, t_decibel, _c10.t_model, _c10.t_table_model],
     Q_REP: [t_graph_formula, t_match_curves],
     Q_ARG: [t_props, t_domain, t_counter],
     Q_PRO: [t_eval, t_inverse],

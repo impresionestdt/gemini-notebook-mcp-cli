@@ -50,7 +50,7 @@ table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--line);pad
 const CFG=__CFG__;
 const BANK=__BANK__;
 const MAX_GAP=16;
-const SKILLS=["Resolver problemas","Modelar","Representar","Argumentar","Aplicar procedimientos"];
+const SKILLS=["Resolver problemas","Modelar","Representar","Argumentar"];
 const rnd=n=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]/4294967296*n|0};
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
 // Validación en el navegador: 5 opciones únicas y correcta <= distractor más largo + 16.
@@ -62,11 +62,12 @@ function valid(q){
 const GOOD=BANK.filter(valid);
 if(GOOD.length!==BANK.length)console.warn("Preguntas descartadas por validación:",BANK.length-GOOD.length);
 function pick(){
-  const per=CFG.n/SKILLS.length, out=[];
-  for(const s of SKILLS){
+  const base=Math.floor(CFG.n/SKILLS.length), extra=CFG.n%SKILLS.length, out=[];
+  // Las preguntas sobrantes (p. ej. 10 = 3+3+2+2) se reparten al azar entre las habilidades.
+  shuffle(SKILLS).forEach((s,i)=>{
     const pool=shuffle(GOOD.filter(q=>q.s===s));
-    out.push(...pool.slice(0,per));
-  }
+    out.push(...pool.slice(0,base+(i<extra?1:0)));
+  });
   // Si algún eje quedó corto, completa desde el resto del banco.
   if(out.length<CFG.n){const rest=shuffle(GOOD.filter(q=>!out.includes(q)));out.push(...rest.slice(0,CFG.n-out.length))}
   // >= 90% con imagen: reemplaza sin imagen por otras con imagen si hiciera falta.

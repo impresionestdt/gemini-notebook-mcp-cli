@@ -2,7 +2,8 @@
 import random
 from mathfmt import Raw, fmt, val
 
-SKILLS = ["Resolver problemas", "Modelar", "Representar", "Argumentar", "Aplicar procedimientos"]
+SKILLS = ["Resolver problemas", "Modelar", "Representar", "Argumentar"]  # las 4 habilidades PAES M2
+LEGACY_PRO = "Aplicar procedimientos"  # ya no es una habilidad: sus plantillas pasan a «Resolver problemas»
 MAX_GAP = 16  # correcta - distractor más largo <= 16 caracteres
 
 
@@ -36,11 +37,23 @@ def make(stem, svg, correct, dists, skill, expl):
     return {"q": stem, "svg": svg, "o": [correct] + dists, "s": skill, "e": expl}
 
 
+def norm(by_skill):
+    """Unifica las plantillas al esquema de 4 habilidades (los procedimientos se evalúan como resolución de problemas)."""
+    by = {k: list(v) for k, v in by_skill.items() if k != LEGACY_PRO}
+    for f in by_skill.get(LEGACY_PRO, []):
+        if f not in by.setdefault(SKILLS[0], []):
+            by[SKILLS[0]].append(f)
+    return by
+
+
 def gen_bank(by_skill, lvl, size, seed):
     rng = random.Random(seed)
-    quota = size // len(SKILLS)
+    by_skill = norm(by_skill)
+    base, extra = divmod(size, len(SKILLS))
+    quotas = {s: base + (1 if i < extra else 0) for i, s in enumerate(SKILLS)}
     bank, seen = [], set()
     for skill, fs in by_skill.items():
+        quota = quotas[skill]
         cnt = att = 0
         while cnt < quota and att < 40000:
             f = fs[att % len(fs)]

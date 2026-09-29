@@ -351,9 +351,10 @@ def t_count_words(r, l):
     return make(stem, fig, ans, pick4(ans, dist(ans, alts)), Q_PRO, f"Resultado: {ans}.")
 
 
+import clase23 as _c23
 BY_SKILL = {
     Q_RES: [t_choose, t_anagram],
-    Q_MOD: [t_context, t_lottery],
+    Q_MOD: [t_context, t_lottery, _c23.t_context, _c23.t_password],
     Q_REP: [t_which_formula, t_pascal],
     Q_ARG: [t_props, t_order, t_error],
     Q_PRO: [t_eval, t_count_words],

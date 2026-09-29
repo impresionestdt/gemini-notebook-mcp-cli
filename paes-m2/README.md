@@ -12,14 +12,16 @@ python3 build.py        # regenera todo en ../dist  (o: python3 build.py 1 2)
 - `generator/clase01.py`: plantillas paramétricas de la Clase 1.
 - `generator/common.py`: regla de alternativas (correcta - distractor más largo <= 16 caracteres) y bancos.
 - `generator/template.html`: interfaz del quiz. Revalida la regla de 16 caracteres al cargar,
-  elige preguntas al azar balanceando las 5 habilidades y garantiza >= 90 % con imagen.
+  elige preguntas al azar balanceando las 4 habilidades PAES M2 (Resolver problemas, Modelar, Representar, Argumentar) y garantiza >= 90 % con imagen.
 
 Entregado (semanas 1-4 · eje Números):
+- Habilidades: las 4 de la PAES M2. Las plantillas de «Aplicar procedimientos» (suposición inicial) se evalúan ahora como «Resolver problemas».
 - Clases 1, 2 y 3: Principiante / Avanzado / Experto, banco de 150 por nivel, 10 por intento (`dist/clase-0N/`).
-- Semana 4 · Mini ensayo Números M2 (`dist/clase-04/mini-ensayo.html`): nivel Experto, banco de 250 (50 por habilidad,
+- Semana 4 · Mini ensayo Números M2 (`dist/clase-04/mini-ensayo.html`): nivel Experto, banco de 250 (62-63 por habilidad,
   mezcla las plantillas de las clases 1-3 en nivel Experto), 20 por intento.
 - Semana 14 · Mini ensayo Álgebra y Funciones M2 (`dist/clase-14/mini-ensayo.html`): igual estructura, con las plantillas de las clases 5-13.
 - Semana 22 · Mini ensayo Geometría M2 (`dist/clase-22/mini-ensayo.html`): igual estructura, con las plantillas de las clases 15-21.
 - Semana 28 · Mini ensayo Probabilidad y Estadística M2 (`dist/clase-28/mini-ensayo.html`): igual estructura, con las plantillas de las clases 23-27.
-- Semana 29 · Ensayo General PAES M2 (`dist/clase-29/ensayo-final.html`): nivel Experto, 40 preguntas de un banco de 500 (100 por habilidad) con plantillas de las 27 clases repartidas por igual.
+- Semana 29 · Ensayo General PAES M2 (`dist/clase-29/ensayo-final.html`): nivel Experto, 40 preguntas de un banco de 500 (125 por habilidad) con plantillas de las 27 clases repartidas por igual.
+- Semana 30 · Corrección integral y estrategias finales (`dist/clase-30/`): Principiante / Avanzado / Experto sobre análisis de distractores (por qué una alternativa falsa «parece» correcta), banco de 150 por nivel.
 Para agregar un mini ensayo o una clase nueva: registrarla en `CLASES` / `MINIS` de `generator/build.py`.

@@ -403,9 +403,10 @@ def t_mid(r, l):
     return make(stem, pl.svg("Segmento AB"), ans, pick4(ans, cs), Q_PRO, f"El punto medio de A'B' es la imagen del punto medio de AB: {ans}.")
 
 
+import clase16 as _c16
 BY_SKILL = {
     Q_RES: [t_image_point, t_find],
-    Q_MOD: [t_lamp, t_logo],
+    Q_MOD: [t_lamp, t_logo, _c16.t_scale_ctx, _c16.t_pizza],
     Q_REP: [t_ratio_fig, t_classify],
     Q_ARG: [t_props, t_compose, t_error],
     Q_PRO: [t_lengths, t_mid],
