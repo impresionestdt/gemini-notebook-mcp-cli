@@ -317,7 +317,7 @@ def gen_fun(r, l, inv):
     if c == "quart":
         return f"x⁴ + {r.randint(1, 9)}"
     if c == "cub":
-        return f"x³ − {r.choice([1, 2, 3, 4])}x²"
+        cc = r.choice([1, 2, 3, 4]); return "x³ − " + ("" if cc == 1 else str(cc)) + "x²"
     if c == "cubb":
         a = r.randint(1, 5); return f"x³ − {a}x"
     return f"x²|x| + {r.randint(1, 4)}"
