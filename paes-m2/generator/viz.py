@@ -100,3 +100,36 @@ def urn_fig(counts, title=None, per_row=6):
         body += C(478, y, 10, COLMAP.get(nm, "#E5E7EB"), INK, 2) + T(494, y + 5, f"{nm}: {n}", 15, "start")
     if title: body += tag(280, 20, title, 15)
     return wrap(560, 265, body, "Urna con bolitas de colores")
+
+
+def pick_fig(n, chosen, ordered, names=None):
+    """Fila de n elementos; los elegidos se resaltan. ordered=True numera la elección (orden importa)."""
+    names = names or [chr(65 + i) for i in range(n)]
+    w = min(60, 500 / n)
+    x0 = (560 - w * n) / 2
+    body = ""
+    for i in range(n):
+        x = x0 + i * w + w / 2
+        sel = i in chosen
+        body += C(x, 110, w * 0.36, FILL3 if sel else WHITE, ACC if sel else NAVY, 4 if sel else 2.5) + T(x, 116, names[i], 18)
+        if sel and ordered:
+            body += tag(x, 62, str(chosen.index(i) + 1), 15)
+    cap = "El orden de elección importa (1.º, 2.º, …)" if ordered else "Solo importa qué elementos se eligen"
+    body += tag(280, 175, cap, 15)
+    return wrap(560, 205, body, "Elementos y elección")
+
+
+def pascal_fig(rows, hide=None, hl=()):
+    """Triángulo de Pascal con filas 0..rows-1. hide=(fila, col) muestra '?'; hl: celdas resaltadas."""
+    from math import comb
+    body = ""
+    dy = min(38, 240 / rows)
+    w = min(50, 520 / rows)
+    for n in range(rows):
+        for k in range(n + 1):
+            x = 280 + (k - n / 2) * w
+            y = 30 + n * dy
+            txt = "?" if hide == (n, k) else str(comb(n, k))
+            fill = FILL2 if (hide == (n, k)) else (FILL3 if (n, k) in hl else FILL)
+            body += R(x - w * 0.42, y - dy * 0.42, w * 0.84, dy * 0.84, fill, NAVY, 1.5) + T(x, y + 6, txt, 14 if len(txt) > 2 else 16)
+    return wrap(560, 50 + rows * dy, body, "Triángulo de Pascal")
