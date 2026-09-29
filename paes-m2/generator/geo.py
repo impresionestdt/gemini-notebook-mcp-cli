@@ -175,3 +175,82 @@ def trig_tri(adj, opp, labs, ang="α", show_other=None, names=("A", "B", "C")):
     if labs.get("hyp"): body += tag(*shift(mid(A, B), -34, -22), labs["hyp"], 16)
     body += letter(A[0] - 18, A[1] + 6, na) + letter(B[0] + 4, B[1] - 16, nb) + letter(C_[0] + 20, C_[1] + 8, nc)
     return wrap(560, 290, body, "Triángulo rectángulo con un ángulo agudo marcado")
+
+
+def elev_fig(kind, dist, height, ang, eye=None, ang2=None, dist2=None):
+    """Ángulo de elevación (kind='elev') o de depresión (kind='dep').
+    dist, height, ang, eye: textos (pueden ser '' o '?'). ang2/dist2: segunda observación."""
+    import math
+    ground = 235
+    body = L(20, ground, 540, ground, INK, 3)
+    if kind == "elev":
+        ox, tx = 90, 440
+        H = 150
+        eyey = ground - (28 if eye else 22)
+        body += R(tx - 16, ground - H, 32, H, FILL2)  # torre
+        body += C(ox, ground - 42, 9, FILL, INK, 2.5) + L(ox, ground - 33, ox, ground - 10, INK, 4) + L(ox, ground - 10, ox - 8, ground, INK, 3) + L(ox, ground - 10, ox + 8, ground, INK, 3)
+        top = (tx, ground - H)
+        eye_p = (ox + 10, ground - 42)
+        body += L(eye_p[0], eye_p[1], tx + 0, top[1], ACC, 3.5)
+        body += L(eye_p[0], eye_p[1], tx - 16, eye_p[1], INK, 2.5, "8 6")
+        th = math.atan2(eye_p[1] - top[1], tx - eye_p[0])
+        body += f'<path d="M {eye_p[0] + 60} {eye_p[1]} A 60 60 0 0 0 {eye_p[0] + 60 * math.cos(th):.1f} {eye_p[1] - 60 * math.sin(th):.1f}" fill="none" stroke="{NAVY}" stroke-width="3.5"/>'
+        body += tag(eye_p[0] + 92, eye_p[1] - 14, ang, 16)
+        if dist: body += tag((ox + tx) / 2, ground + 22, dist, 16)
+        if height: body += tag(tx + 44, ground - H / 2, height, 16)
+        if eye: body += tag(ox - 4, ground - 66, eye, 14)
+        if ang2:
+            ox2 = ox + 150
+            eye2 = (ox2 + 10, ground - 42)
+            body += C(ox2, ground - 42, 9, FILL, INK, 2.5) + L(ox2, ground - 33, ox2, ground - 10, INK, 4) + L(ox2, ground - 10, ox2 - 8, ground, INK, 3) + L(ox2, ground - 10, ox2 + 8, ground, INK, 3)
+            body += L(eye2[0], eye2[1], tx, top[1], "#475569", 3, "9 6")
+            th2 = math.atan2(eye2[1] - top[1], tx - eye2[0])
+            body += f'<path d="M {eye2[0] + 44} {eye2[1]} A 44 44 0 0 0 {eye2[0] + 44 * math.cos(th2):.1f} {eye2[1] - 44 * math.sin(th2):.1f}" fill="none" stroke="{NAVY}" stroke-width="3.5"/>'
+            body += tag(eye2[0] + 62, eye2[1] - 34, ang2, 15)
+            if dist2: body += tag((ox + ox2) / 2, ground + 22 if not dist else ground + 50, dist2, 15)
+        return wrap(560, 285, body, "Ángulo de elevación")
+    # depresión
+    cx, bx = 130, 450
+    H = 150
+    top = (cx, ground - H)
+    body += R(cx - 60, ground - H, 60, H, FILL2) + R(20, ground, 520, 26, "#BFDBFE") if False else R(cx - 60, ground - H, 60, H, FILL2)
+    body += C(cx + 10, top[1] - 9, 9, FILL, INK, 2.5) + L(cx + 10, top[1], cx + 10, top[1] + 0, INK, 1)
+    src = (cx + 10, top[1] - 9)
+    body += L(src[0], src[1], bx, ground - 8, ACC, 3.5) + L(src[0], src[1], bx, src[1], INK, 2.5, "8 6")
+    # barco
+    body += P([(bx - 26, ground - 8), (bx + 26, ground - 8), (bx + 16, ground + 4), (bx - 16, ground + 4)], FILL, NAVY, 3) + L(bx, ground - 8, bx, ground - 34, INK, 3)
+    th = math.atan2(ground - 8 - src[1], bx - src[0])
+    body += f'<path d="M {src[0] + 62} {src[1]} A 62 62 0 0 1 {src[0] + 62 * math.cos(th):.1f} {src[1] + 62 * math.sin(th):.1f}" fill="none" stroke="{NAVY}" stroke-width="3.5"/>'
+    body += tag(src[0] + 100, src[1] + 30, ang, 16)
+    if height: body += tag(cx - 90, ground - H / 2, height, 16)
+    if dist: body += tag((cx + bx) / 2, ground + 30, dist, 16)
+    return wrap(560, 285, body, "Ángulo de depresión")
+
+
+def box3d(a, b, c, labs=None, diags=(), names=("A", "B", "C", "D", "E", "F", "G", "H"), dashed=(), letters=True):
+    """Caja rectangular. Base ABCD (A frente-izq., B frente-der., C fondo-der., D fondo-izq.), techo EFGH sobre A,B,C,D.
+    a: largo AB, b: ancho BC (profundidad), c: alto."""
+    labs = labs or {}
+    s = min(250 / a, 150 / c, 120 / (b * 0.5))
+    w, h, dx = a * s, c * s, b * s * 0.5
+    dy = b * s * 0.32
+    x0, y0 = 90, 238
+    A = (x0, y0); B = (x0 + w, y0); Cc = (x0 + w + dx, y0 - dy); D = (x0 + dx, y0 - dy)
+    E, F_, G, H_ = (A[0], A[1] - h), (B[0], B[1] - h), (Cc[0], Cc[1] - h), (D[0], D[1] - h)
+    pts = dict(zip(names, (A, B, Cc, D, E, F_, G, H_)))
+    body = P([E, F_, G, H_], "#93C5FD") + P([A, B, F_, E], FILL) + P([B, Cc, G, F_], "#BFDBFE")
+    for u, v in (("A", "D"), ("D", "C"), ("D", "H")):
+        p1, p2 = pts[names[("ABCDEFGH").index(u)]], pts[names[("ABCDEFGH").index(v)]]
+        body += L(p1[0], p1[1], p2[0], p2[1], "#64748B", 2, "6 5")
+    for u, v in diags:
+        p1, p2 = pts[names[("ABCDEFGH").index(u)]], pts[names[("ABCDEFGH").index(v)]]
+        body += L(p1[0], p1[1], p2[0], p2[1], ACC, 4, "9 5" if (u, v) in dashed else None)
+    if letters:
+        for nm, key in zip(names, "ABCDEFGH"):
+            p = pts[nm]
+            off = {"A": (-16, 16), "B": (16, 16), "C": (18, 4), "D": (-14, 4), "E": (-16, -6), "F": (12, -12), "G": (16, -8), "H": (-14, -12)}[key]
+            body += letter(p[0] + off[0], p[1] + off[1], nm, 18)
+    if labs.get("a"): body += tag((A[0] + B[0]) / 2, y0 + 34, labs["a"], 15)
+    if labs.get("b"): body += tag((B[0] + Cc[0]) / 2 + 30, (B[1] + Cc[1]) / 2 + 16, labs["b"], 15)
+    if labs.get("c"): body += tag(A[0] - 36, (A[1] + E[1]) / 2, labs["c"], 15)
+    return wrap(560, 300, body, "Caja rectangular con sus diagonales")
