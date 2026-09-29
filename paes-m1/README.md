@@ -15,4 +15,4 @@ Mismo sistema que `paes-m2/`, aplicado a la *Planificación Estratégica PAES M1
 - Las clases de corrección (12, 30, 44, 56) no llevan quiz.
 
 ## Avance
-Clases 1 a 26 listas. Siguiente: clase 27.
+Clases 1 a 29 (Números y Álgebra y Funciones con sus mini ensayos) listas. Siguiente: clase 31.
