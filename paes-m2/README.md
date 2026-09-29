@@ -8,7 +8,7 @@ python3 build.py        # regenera todo en ../dist  (o: python3 build.py 1 2)
 ```
 
 - `brand.json`: colores (provisorios) y color distintivo por nivel.
-- `assets/logo.svg`: logo completo (PROVISORIO; reemplazar por el oficial, microscopio + texto).
+- `assets/logo.webp`: logo oficial completo (microscopio + texto), incrustado en cada HTML.
 - `generator/clase01.py`: plantillas paramétricas de la Clase 1.
 - `generator/common.py`: regla de alternativas (correcta - distractor más largo <= 16 caracteres) y bancos.
 - `generator/template.html`: interfaz del quiz. Revalida la regla de 16 caracteres al cargar,

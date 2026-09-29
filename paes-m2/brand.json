@@ -1,12 +1,27 @@
 {
-  "_nota": "Colores PROVISORIOS: reemplazar por los hexadecimales corporativos de la academia.",
-  "primary": "#0B3D6E",
-  "accent": "#F2A900",
+  "primary": "#4C1D75",
+  "accent": "#B45F1E",
   "levels": {
-    "principiante": {"name": "Principiante", "color": "#166534"},
-    "avanzado": {"name": "Avanzado", "color": "#9A3412"},
-    "experto": {"name": "Experto", "color": "#9F1239"},
-    "mini": {"name": "Mini ensayo (Experto)", "color": "#5B21B6"},
-    "final": {"name": "Ensayo final PAES (Experto)", "color": "#111827"}
-  }
+    "principiante": {
+      "name": "Principiante",
+      "color": "#166534"
+    },
+    "avanzado": {
+      "name": "Avanzado",
+      "color": "#1D4ED8"
+    },
+    "experto": {
+      "name": "Experto",
+      "color": "#9F1239"
+    },
+    "mini": {
+      "name": "Mini ensayo (Experto)",
+      "color": "#0F766E"
+    },
+    "final": {
+      "name": "Ensayo final PAES (Experto)",
+      "color": "#111827"
+    }
+  },
+  "_nota": "Colores tomados del logo oficial: morado y cobre/dorado."
 }

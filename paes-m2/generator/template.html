@@ -9,8 +9,9 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.45}
 header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:5px solid var(--level);display:flex;align-items:center;gap:16px;padding:8px 16px;flex-wrap:wrap}
-.logo{height:56px;width:auto;min-width:230px;flex:0 0 auto}
-.logo svg{height:100%;width:auto;display:block;overflow:visible}
+.logo{height:92px;width:auto;flex:0 0 auto}
+.logo img{height:100%;width:auto;display:block}
+@media(max-width:640px){header{position:static}.logo{height:80px}}
 .badge{background:var(--level);color:#fff;font-weight:800;padding:6px 14px;border-radius:999px;font-size:15px}
 .meta{margin-left:auto;font-weight:700;font-size:15px}
 main{max-width:860px;margin:0 auto;padding:16px}

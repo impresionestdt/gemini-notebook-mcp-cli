@@ -5,7 +5,7 @@ from svgkit import TEXT_ON, contrast
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 BRAND = json.loads((ROOT / "brand.json").read_text(encoding="utf-8"))
-LOGO = (ROOT / "assets" / "logo.svg").read_text(encoding="utf-8")
+LOGO = '<img alt="Academia Mirza Cortés" src="data:image/webp;base64,' + __import__("base64").b64encode((ROOT / "assets" / "logo.webp").read_bytes()).decode() + '">'
 TPL = (ROOT / "generator" / "template.html").read_text(encoding="utf-8")
 DIST = ROOT / "dist"
 
