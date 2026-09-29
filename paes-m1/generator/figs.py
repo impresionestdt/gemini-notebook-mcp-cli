@@ -2,17 +2,17 @@
 from svgkit import *
 
 
-def numline(lo, hi, marks=None, step=1, jumps=None, hl=None, w=560):
+def numline(lo, hi, marks=None, step=1, jumps=None, hl=None, w=560, fmt=None):
     """Recta numérica de lo a hi. marks: {rótulo: valor} (círculo + píldora); jumps: [(desde, hasta, texto)] como arcos."""
     x0, x1, y = 40, w - 40, 130
-    X = lambda v: x0 + (v - lo) / (hi - lo) * (x1 - x0)
+    X = lambda v: x0 + float((v - lo) / (hi - lo)) * (x1 - x0)
     body = L(x0 - 14, y, x1 + 14, y, INK, 3.5)
     body += P([(x1 + 22, y), (x1 + 8, y - 7), (x1 + 8, y + 7)], INK, INK, 1) + P([(x0 - 22, y), (x0 - 8, y - 7), (x0 - 8, y + 7)], INK, INK, 1)
     v = lo
     while v <= hi + 1e-9:
         big = abs(v) < 1e-9
         body += L(X(v), y - (10 if big else 7), X(v), y + (10 if big else 7), INK, 3 if big else 2)
-        body += T(X(v), y + 34, z_(v), 15)
+        body += T(X(v), y + 34, (fmt(v) if fmt else z_(v)), 15)
         v += step
     for i, (a, b, t) in enumerate(jumps or []):
         xa, xb = X(a), X(b)
@@ -116,3 +116,44 @@ def factor_tree(primes, hide=None, w=560):
         hid = hide is not None and j == hide
         circ += f'<circle cx="{cx}" cy="{cy}" r="27" fill="{FILL2 if hid else (FILL3 if isp else FILL)}" stroke="{NAVY}" stroke-width="3"/>' + T(cx, cy + 7, "?" if hid else str(val), 19)
     return wrap(w, h + 30, edges + circ, "Árbol de factores primos"), nodes
+
+
+def frac_bars(items, w=560):
+    """items: [(rótulo, num, den)] barras divididas en den partes con num sombreadas."""
+    body = ""
+    h = 30 + 62 * len(items)
+    for i, (lab, num, den) in enumerate(items):
+        y = 20 + 62 * i
+        bw = 360
+        cw = bw / den
+        body += tag(50, y + 24, lab, 17)
+        for j in range(den):
+            body += R(110 + j * cw, y, cw, 48, FILL3 if j < num else WHITE, NAVY, 2.5)
+    return wrap(w, h, body, "Barras divididas en partes iguales")
+
+
+def frac_pie(num, den, w=560, r=95, lab=None):
+    import math
+    cx, cy = 280, 20 + r + 6
+    body = ""
+    for j in range(den):
+        a0 = -math.pi / 2 + 2 * math.pi * j / den
+        a1 = -math.pi / 2 + 2 * math.pi * (j + 1) / den
+        x0_, y0_ = cx + r * math.cos(a0), cy + r * math.sin(a0)
+        x1_, y1_ = cx + r * math.cos(a1), cy + r * math.sin(a1)
+        large = 1 if a1 - a0 > math.pi else 0
+        d = f"M {cx} {cy} L {x0_:.1f} {y0_:.1f} A {r} {r} 0 {large} 1 {x1_:.1f} {y1_:.1f} Z"
+        body += f'<path d="{d}" fill="{FILL3 if j < num else WHITE}" stroke="{NAVY}" stroke-width="2.5"/>'
+    if lab:
+        body += tag(cx + r + 90, cy, lab, 17)
+    return wrap(w, 2 * r + 44, body, "Círculo dividido en partes iguales")
+
+
+def grid_shaded(rows, cols, shaded, w=560, cell=36):
+    """Cuadrícula rows x cols con `shaded` celdas sombreadas (por filas)."""
+    x0 = (w - cols * cell) / 2
+    body = ""
+    for i in range(rows):
+        for j in range(cols):
+            body += R(x0 + j * cell, 16 + i * cell, cell, cell, FILL3 if i * cols + j < shaded else WHITE, NAVY, 2)
+    return wrap(w, rows * cell + 32, body, "Cuadrícula con celdas sombreadas")
