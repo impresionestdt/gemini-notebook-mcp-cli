@@ -11,7 +11,8 @@ DIST = ROOT / "dist"
 
 CLASES = {1: ("clase01", "Números Reales e Irracionales: propiedades y racionalización"),
           2: ("clase02", "Logaritmos: concepto, operatoria y propiedades"),
-          3: ("clase03", "Porcentajes avanzados e interés compuesto")}
+          3: ("clase03", "Porcentajes avanzados e interés compuesto"),
+          5: ("clase05", "Ecuación cuadrática avanzada: discriminante y naturaleza de las raíces")}
 LEVELS = [("principiante", 0), ("avanzado", 1), ("experto", 2)]
 # Mini ensayos de cierre de unidad: semana -> (título, clases que integra)
 MINIS = {4: ("MINI ENSAYO: Números M2", [1, 2, 3])}
