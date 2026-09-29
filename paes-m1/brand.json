@@ -1,0 +1,27 @@
+{
+  "primary": "#4B2363",
+  "accent": "#B37D48",
+  "levels": {
+    "principiante": {
+      "name": "Principiante",
+      "color": "#166534"
+    },
+    "avanzado": {
+      "name": "Avanzado",
+      "color": "#1D4ED8"
+    },
+    "experto": {
+      "name": "Experto",
+      "color": "#9F1239"
+    },
+    "mini": {
+      "name": "Mini ensayo (Experto)",
+      "color": "#0F766E"
+    },
+    "final": {
+      "name": "Ensayo final PAES (Experto)",
+      "color": "#111827"
+    }
+  },
+  "_nota": "Colores corporativos: morado #4B2363 y dorado #B37D48 (medios del logo oficial); apoyos: morado oscuro #2A113F, morado claro #7F4896, bronce #53321D, dorado claro #EBD09D."
+}
