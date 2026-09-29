@@ -18,7 +18,8 @@ CLASES = {1: ("clase01", "Números Reales e Irracionales: propiedades y racional
           8: ("clase08", "Sistemas de inecuaciones lineales"),
           9: ("clase09", "Concepto de función inversa y biyectividad"),
           10: ("clase10", "Función exponencial: modelos de crecimiento y decaimiento"),
-          11: ("clase11", "Función logarítmica: gráfica y propiedades")}
+          11: ("clase11", "Función logarítmica: gráfica y propiedades"),
+          12: ("clase12", "Sistemas de ecuaciones avanzados (no lineales)")}
 LEVELS = [("principiante", 0), ("avanzado", 1), ("experto", 2)]
 # Mini ensayos de cierre de unidad: semana -> (título, clases que integra)
 MINIS = {4: ("MINI ENSAYO: Números M2", [1, 2, 3])}
