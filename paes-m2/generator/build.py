@@ -1,6 +1,6 @@
 """Genera los HTML de evaluación. Uso: python3 build.py [clase ...]  (por defecto: todas las disponibles)"""
 import json, sys, importlib, pathlib, itertools
-from common import gen_bank, check_lengths
+from common import gen_bank, check_lengths, SKILLS
 from svgkit import TEXT_ON, contrast
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -39,7 +39,9 @@ MINIS = {4: ("MINI ENSAYO: Números M2", [1, 2, 3]),
          14: ("MINI ENSAYO: Álgebra y Funciones M2", [5, 6, 7, 8, 9, 10, 11, 12, 13]),
          22: ("MINI ENSAYO: Geometría M2", [15, 16, 17, 18, 19, 20, 21]),
          28: ("MINI ENSAYO: Probabilidad y Estadística M2", [23, 24, 25, 26, 27])}
+FINAL_WEEK = 29
 TITULOS = {c: t for c, (_, t) in CLASES.items()}
+TITULOS[FINAL_WEEK] = "ENSAYO GENERAL PAES M2 (todos los ejes)"
 TITULOS.update({w: f"{t} + corrección" for w, (t, _) in MINIS.items()})
 
 
@@ -70,11 +72,26 @@ def main(argv):
         assert contrast(fg, bg) >= 7, (fg, bg)
     for k, v in BRAND["levels"].items():
         assert contrast("#FFFFFF", v["color"]) >= 4.5, k
-    wanted = [int(a) for a in argv] or list(CLASES) + list(MINIS)
+    wanted = [int(a) for a in argv] or list(CLASES) + list(MINIS) + [FINAL_WEEK]
     for c in wanted:
         d = DIST / f"clase-{c:02d}"
         d.mkdir(parents=True, exist_ok=True)
-        if c in CLASES:
+        if c == FINAL_WEEK:
+            # todo el temario: cada clase aporta por igual (round-robin entre clases dentro de cada habilidad)
+            per_class = {cl: importlib.import_module(CLASES[cl][0]).BY_SKILL for cl in CLASES}
+            by = {}
+            for sk in SKILLS:
+                lists = [per_class[cl][sk] for cl in CLASES if sk in per_class[cl]]
+                seq = []
+                for i in range(max(len(x) for x in lists) * len(lists)):
+                    seq.append(lists[i % len(lists)][(i // len(lists)) % len(lists[i % len(lists)])])
+                by[sk] = seq
+            bank = gen_bank(by, 2, 500, seed=c * 1000 + 9)
+            validate(bank, 500)
+            html = page(f"Semana {c} · Ensayo General PAES M2", "final", f"Semana {c}: ENSAYO GENERAL PAES M2 · todos los ejes (40 preguntas)", bank, 40)
+            (d / "ensayo-final.html").write_text(html, encoding="utf-8")
+            print(f"clase-{c:02d}/ensayo-final.html  {len(html)//1024} KB  banco={len(bank)}")
+        elif c in CLASES:
             m = importlib.import_module(CLASES[c][0])
             for key, lvl in LEVELS:
                 bank = gen_bank(m.BY_SKILL, lvl, 150, seed=c * 1000 + lvl)
@@ -98,6 +115,7 @@ def main(argv):
     # índice secuencial: clase/semana → nivel o tipo de evaluación
     names = {k: BRAND["levels"][k]["name"] for k, _ in LEVELS}
     names["mini-ensayo"] = BRAND["levels"]["mini"]["name"]
+    names["ensayo-final"] = BRAND["levels"]["final"]["name"]
     items = ""
     for c in sorted(TITULOS):
         links = [f'<a href="clase-{c:02d}/{k}.html">{n}</a>' for k, n in names.items() if (DIST / f"clase-{c:02d}" / f"{k}.html").exists()]

@@ -21,4 +21,5 @@ Entregado (semanas 1-4 · eje Números):
 - Semana 14 · Mini ensayo Álgebra y Funciones M2 (`dist/clase-14/mini-ensayo.html`): igual estructura, con las plantillas de las clases 5-13.
 - Semana 22 · Mini ensayo Geometría M2 (`dist/clase-22/mini-ensayo.html`): igual estructura, con las plantillas de las clases 15-21.
 - Semana 28 · Mini ensayo Probabilidad y Estadística M2 (`dist/clase-28/mini-ensayo.html`): igual estructura, con las plantillas de las clases 23-27.
+- Semana 29 · Ensayo General PAES M2 (`dist/clase-29/ensayo-final.html`): nivel Experto, 40 preguntas de un banco de 500 (100 por habilidad) con plantillas de las 27 clases repartidas por igual.
 Para agregar un mini ensayo o una clase nueva: registrarla en `CLASES` / `MINIS` de `generator/build.py`.
