@@ -15,4 +15,6 @@ Mismo sistema que `paes-m2/`, aplicado a la *Planificación Estratégica PAES M1
 - Las clases de corrección (12, 30, 44, 56) no llevan quiz.
 
 ## Avance
-Clases 1 a 29 (Números y Álgebra y Funciones con sus mini ensayos) listas. Siguiente: clase 31.
+COMPLETO: clases 1–11, 13–29, 31–43, 45–55 y Ensayo General (57): 150 HTML (48 clases × 3 niveles, 4 mini ensayos y el ensayo final).
+
+Descarga en un solo archivo: `PAES-M1-Evaluaciones.zip` (carpeta `dist/` con índice `index.html`).
