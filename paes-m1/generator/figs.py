@@ -193,3 +193,43 @@ def hbars_pct(items, w=560, top=100):
         body += T(120, y + 30, lab, 16, "end") + R(130, y, 380 * v / top, 40, FILL3) + tag(130 + 380 * v / top + 30, y + 20, f"{v}%", 15)
     body += L(130, 10, 130, h - 10, INK, 2.5)
     return wrap(w, h, body, "Barras horizontales con porcentajes")
+
+
+def interval_line(lo, hi, a=None, b=None, a_closed=True, b_closed=True, w=560, step=1):
+    """Recta numérica lo..hi con el intervalo sombreado entre a y b (None = infinito) y extremos abiertos/cerrados."""
+    x0, x1, y = 40, w - 40, 110
+    X = lambda v: x0 + float((v - lo) / (hi - lo)) * (x1 - x0)
+    body = ""
+    sa = x0 - 14 if a is None else X(a)
+    sb = x1 + 14 if b is None else X(b)
+    body += R(sa, y - 9, sb - sa, 18, "#93C5FD", "#93C5FD", 1)
+    body += L(x0 - 14, y, x1 + 14, y, INK, 3.5)
+    body += P([(x1 + 22, y), (x1 + 8, y - 7), (x1 + 8, y + 7)], INK, INK, 1) + P([(x0 - 22, y), (x0 - 8, y - 7), (x0 - 8, y + 7)], INK, INK, 1)
+    v = lo
+    while v <= hi + 1e-9:
+        body += L(X(v), y - 8, X(v), y + 8, INK, 2.5 if v == 0 else 2) + T(X(v), y + 34, z_(v), 15)
+        v += step
+    for val, closed in ((a, a_closed), (b, b_closed)):
+        if val is not None:
+            body += C(X(val), y, 9, INK if closed else WHITE, INK, 3)
+    return wrap(w, 170, body, "Recta numérica con un intervalo sombreado")
+
+
+def arrow_diagram(A, B, pairs, w=560):
+    """Diagrama sagital: conjuntos A y B (listas) y flechas (a, b) entre ellos."""
+    n = max(len(A), len(B))
+    h = 40 + 46 * n + 30
+    ya = lambda i, m: 60 + (h - 100) * (i + 0.5) / m
+    body = f'<ellipse cx="170" cy="{h / 2:.0f}" rx="80" ry="{h / 2 - 20:.0f}" fill="#F1F5F9" stroke="{NAVY}" stroke-width="3"/>'
+    body += f'<ellipse cx="390" cy="{h / 2:.0f}" rx="80" ry="{h / 2 - 20:.0f}" fill="#FEF3C7" stroke="{NAVY}" stroke-width="3"/>'
+    body += tag(170, 20, "Conjunto A", 15) + tag(390, 20, "Conjunto B", 15)
+    posA = {a: (170, ya(i, len(A))) for i, a in enumerate(A)}
+    posB = {b: (390, ya(i, len(B))) for i, b in enumerate(B)}
+    for a, b in pairs:
+        (x1, y1), (x2, y2) = posA[a], posB[b]
+        body += L(x1 + 26, y1, x2 - 30, y2, ACC, 3) + P([(x2 - 26, y2), (x2 - 42, y2 - 7 + (y1 - y2) * 0.05), (x2 - 42, y2 + 7 + (y1 - y2) * 0.05)], ACC, ACC, 1)
+    for a, (x, y) in posA.items():
+        body += C(x, y, 22, WHITE, NAVY, 2.5) + T(x, y + 6, z_(a) if not isinstance(a, str) else a, 17)
+    for b, (x, y) in posB.items():
+        body += C(x, y, 22, WHITE, NAVY, 2.5) + T(x, y + 6, z_(b) if not isinstance(b, str) else b, 17)
+    return wrap(w, h + 10, body, "Diagrama sagital de una relación")
