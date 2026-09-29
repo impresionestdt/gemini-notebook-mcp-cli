@@ -133,3 +133,68 @@ def pascal_fig(rows, hide=None, hl=()):
             fill = FILL2 if (hide == (n, k)) else (FILL3 if (n, k) in hl else FILL)
             body += R(x - w * 0.42, y - dy * 0.42, w * 0.84, dy * 0.84, fill, NAVY, 1.5) + T(x, y + 6, txt, 14 if len(txt) > 2 else 16)
     return wrap(560, 50 + rows * dy, body, "Triángulo de Pascal")
+
+
+def two_way_fig(rlabs, clabs, cells, hl_num=(), hl_den_col=None, hl_den_row=None, hide=None, show_totals=True, corner=""):
+    """Tabla de doble entrada. cells[i][j] enteros. hl_num: celdas resaltadas en naranja; hl_den_col/row: columna o fila resaltada en azul."""
+    nr, nc = len(rlabs), len(clabs)
+    tot_r = [sum(row) for row in cells]
+    tot_c = [sum(cells[i][j] for i in range(nr)) for j in range(nc)]
+    N = sum(tot_r)
+    cols = nc + (1 if show_totals else 0)
+    w0 = 130
+    w = (500 - w0) / cols
+    h = 44
+    body = R(30, 30, 500, h, "#E0F2FE") + T(30 + w0 / 2, 30 + h * 0.65, corner, 16)
+    for j, t in enumerate(clabs + (["Total"] if show_totals else [])):
+        body += T(30 + w0 + w * (j + 0.5), 30 + h * 0.65, t, 17)
+    rows = nr + (1 if show_totals else 0)
+    for i in range(rows):
+        y = 30 + h * (i + 1)
+        lab = rlabs[i] if i < nr else "Total"
+        body += R(30, y, 500, h, WHITE) + T(30 + w0 / 2, y + h * 0.65, lab, 17)
+        for j in range(cols):
+            if i < nr and j < nc: val = cells[i][j]
+            elif i < nr: val = tot_r[i]
+            elif j < nc: val = tot_c[j]
+            else: val = N
+            x = 30 + w0 + w * j
+            fill = None
+            if (i, j) in hl_num: fill = FILL2
+            elif hl_den_col is not None and j == hl_den_col and i < nr + (1 if show_totals else 0): fill = FILL3 if False else "#DBEAFE"
+            elif hl_den_row is not None and i == hl_den_row: fill = "#DBEAFE"
+            if fill: body += R(x, y, w, h, fill, NAVY, 1)
+            txt = "?" if hide == (i, j) else str(val)
+            body += T(x + w / 2, y + h * 0.65, txt, 18)
+    for j in range(cols + 2):
+        xx = 30 + (0 if j == 0 else w0 + w * (j - 1))
+        body += L(xx, 30, xx, 30 + h * (rows + 1), NAVY, 2)
+    for i in range(rows + 2):
+        body += L(30, 30 + h * i, 530, 30 + h * i, NAVY, 1.5)
+    return wrap(560, 60 + h * (rows + 1), body, "Tabla de doble entrada")
+
+
+def ptree_fig(first, second, hide=None):
+    """Árbol con probabilidades. first=[(nombre, prob_texto)], second=[[(nombre, prob_texto),...] por rama].
+    hide=(i,None) oculta la prob de la rama i del 1.er nivel; (i,j) oculta la j-ésima del 2.º nivel."""
+    n1 = len(first)
+    per = [len(s) for s in second]
+    L_ = sum(per)
+    dy = min(46, 240 / max(L_, 1))
+    top = 140 - dy * (L_ - 1) / 2
+    body = ""
+    root = (40, 140)
+    leaf_i = 0
+    for i, (nm, pr) in enumerate(first):
+        ys = [top + dy * (leaf_i + j) for j in range(per[i])]
+        leaf_i += per[i]
+        my = sum(ys) / len(ys)
+        body += L(root[0], root[1], 200, my, NAVY, 2.5)
+        txt = "?" if hide == (i, None) else pr
+        body += tag((root[0] + 200) / 2, (root[1] + my) / 2 - 14, txt, 14) + C(200, my, 8, FILL3, INK, 2) + T(200, my - 16 if False else my - 14, nm, 15, "middle")
+        for j, ((nm2, pr2), yy) in enumerate(zip(second[i], ys)):
+            body += L(200, my, 430, yy, NAVY, 2.5) + C(430, yy, 6, ACC, INK, 1.5)
+            t2 = "?" if hide == (i, j) else pr2
+            body += tag(315, (my + yy) / 2 - 12, t2, 14) + T(444, yy + 5, nm2, 15, "start")
+    body += C(root[0], root[1], 9, WHITE, INK, 2.5)
+    return wrap(560, 290, body, "Árbol de probabilidades")

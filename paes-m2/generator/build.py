@@ -29,7 +29,8 @@ CLASES = {1: ("clase01", "Números Reales e Irracionales: propiedades y racional
           20: ("clase20", "Vectores en el plano cartesiano (R² y R³)"),
           21: ("clase21", "Repaso Geometría M2: síntesis proporcional"),
           23: ("clase23", "Técnicas de conteo: principio multiplicativo y factoriales"),
-          24: ("clase24", "Permutaciones y combinatorias")}
+          24: ("clase24", "Permutaciones y combinatorias"),
+          25: ("clase25", "Probabilidad condicional: tablas de doble entrada y espacio muestral reducido")}
 LEVELS = [("principiante", 0), ("avanzado", 1), ("experto", 2)]
 # Mini ensayos de cierre de unidad: semana -> (título, clases que integra)
 MINIS = {4: ("MINI ENSAYO: Números M2", [1, 2, 3]),
