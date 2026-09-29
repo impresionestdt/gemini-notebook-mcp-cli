@@ -254,3 +254,27 @@ def box3d(a, b, c, labs=None, diags=(), names=("A", "B", "C", "D", "E", "F", "G"
     if labs.get("b"): body += tag((B[0] + Cc[0]) / 2 + 30, (B[1] + Cc[1]) / 2 + 16, labs["b"], 15)
     if labs.get("c"): body += tag(A[0] - 36, (A[1] + E[1]) / 2, labs["c"], 15)
     return wrap(560, 300, body, "Caja rectangular con sus diagonales")
+
+
+def right_par(adj, opp, t, labs, names=("A", "B", "C", "D", "E")):
+    """Triángulo rectángulo en C con un segmento DE paralelo al cateto BC (D en AB, E en AC), AE/AC = t."""
+    na, nb, nc, nd, ne = names
+    s = min(360 / adj, 175 / opp)
+    W, H = max(adj * s, 230), opp * s
+    A, C_, B = (90, 235), (90 + W, 235), (90 + W, 235 - H)
+    E_, D_ = (90 + t * W, 235), (90 + t * W, 235 - t * H)
+    body = P([A, B, C_], FILL) + P([D_, E_, C_, B], FILL2) + L(D_[0], D_[1], E_[0], E_[1], ACC, 4)
+    u = 12
+    body += f'<polyline fill="none" stroke="{INK}" stroke-width="2.5" points="{C_[0] - u},{C_[1]} {C_[0] - u},{C_[1] - u} {C_[0]},{C_[1] - u}"/>'
+    body += f'<polyline fill="none" stroke="{INK}" stroke-width="2.5" points="{E_[0] + u},{E_[1]} {E_[0] + u},{E_[1] - u} {E_[0]},{E_[1] - u}"/>'
+    for P_ in (A, B, C_, D_, E_):
+        body += C(P_[0], P_[1], 5, INK, INK, 1)
+    if labs.get("AE"): body += tag((A[0] + E_[0]) / 2, 268, labs["AE"], 15)
+    if labs.get("EC"): body += tag((E_[0] + C_[0]) / 2, 268, labs["EC"], 15)
+    if labs.get("BC"): body += tag(C_[0] + 40, (B[1] + C_[1]) / 2, labs["BC"], 15)
+    if labs.get("DE"): body += tag(E_[0] - 40, (D_[1] + E_[1]) / 2, labs["DE"], 15)
+    if labs.get("AB"): body += tag(*shift(mid(A, B), -34, -22), labs["AB"], 15)
+    if labs.get("AD"): body += tag(*shift(mid(A, D_), -34, -22), labs["AD"], 15)
+    if labs.get("DB"): body += tag(*shift(mid(D_, B), -34, -22), labs["DB"], 15)
+    body += letter(A[0] - 18, A[1] + 6, na) + letter(B[0] + 6, B[1] - 16, nb) + letter(C_[0] + 20, C_[1] + 8, nc) + letter(D_[0] - 18, D_[1] - 10, nd) + letter(E_[0] - 6, E_[1] + 22, ne)
+    return wrap(560, 295, body, "Triángulo rectángulo con un segmento paralelo a un cateto")
