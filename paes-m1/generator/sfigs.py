@@ -88,3 +88,22 @@ def boxplot(five, lo, hi, step, w=560, show=False, unit=""):
         for val, dy in ((mn, 0), (q1, 0), (md, 0), (q3, 0), (mx, 0)):
             g += tag(X(val), 46 if val != md else 18, fs(val), 13)
     return wrap(w, 215, g, "Diagrama de caja y bigotes")
+
+
+def spinner(items, w=560, r=105):
+    """Ruleta con sectores iguales: items = [(rótulo, relleno)]."""
+    import math
+    cx, cy = 280, r + 30
+    n = len(items)
+    g = ""
+    for i, (lab, fill) in enumerate(items):
+        a0 = -math.pi / 2 + 2 * math.pi * i / n
+        a1 = -math.pi / 2 + 2 * math.pi * (i + 1) / n
+        x0, y0 = cx + r * math.cos(a0), cy + r * math.sin(a0)
+        x1, y1 = cx + r * math.cos(a1), cy + r * math.sin(a1)
+        g += f'<path d="M {cx} {cy} L {x0:.1f} {y0:.1f} A {r} {r} 0 0 1 {x1:.1f} {y1:.1f} Z" fill="{fill}" stroke="{NAVY}" stroke-width="3"/>'
+    for i, (lab, fill) in enumerate(items):
+        am = -math.pi / 2 + 2 * math.pi * (i + 0.5) / n
+        g += T(cx + r * 0.66 * math.cos(am), cy + r * 0.66 * math.sin(am) + 6, lab, 18)
+    g += f'<polygon points="{cx},{cy - r - 4} {cx - 10},{cy - r - 24} {cx + 10},{cy - r - 24}" fill="{ACC}" stroke="{INK}" stroke-width="2"/>' + C(cx, cy, 7, INK)
+    return wrap(w, 2 * r + 50, g, "Ruleta con sectores iguales")

@@ -87,18 +87,18 @@ COLMAP = {"rojas": "#FCA5A5", "azules": "#93C5FD", "verdes": "#86EFAC", "amarill
 
 def urn_fig(counts, title=None, per_row=6):
     """Bolitas de colores en una urna: counts = [(nombre, n), ...] (nombre en COLMAP)."""
-    body = f'<path d="M 120 50 L 120 200 Q 120 240 160 240 L 400 240 Q 440 240 440 200 L 440 50" fill="#F8FAFC" stroke="{NAVY}" stroke-width="4"/>'
+    body = f'<path d="M 50 50 L 50 200 Q 50 240 90 240 L 330 240 Q 370 240 370 200 L 370 50" fill="#F8FAFC" stroke="{NAVY}" stroke-width="4"/>'
     i = 0
     for nm, n in counts:
         col = COLMAP.get(nm, "#E5E7EB")
         for _ in range(n):
             r_, c_ = divmod(i, per_row)
-            body += C(155 + c_ * 45, 212 - r_ * 38, 16, col, INK, 2)
+            body += C(85 + c_ * 45, 212 - r_ * 38, 16, col, INK, 2)
             i += 1
     for k, (nm, n) in enumerate(counts):
         y = 70 + 40 * k
-        body += C(478, y, 10, COLMAP.get(nm, "#E5E7EB"), INK, 2) + T(494, y + 5, f"{nm}: {n}", 15, "start")
-    if title: body += tag(280, 20, title, 15)
+        body += C(408, y, 10, COLMAP.get(nm, "#E5E7EB"), INK, 2) + T(424, y + 5, f"{nm}: {n}", 15, "start")
+    if title: body += tag(210, 20, title, 15)
     return wrap(560, 265, body, "Urna con bolitas de colores")
 
 
