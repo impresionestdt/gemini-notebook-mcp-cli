@@ -233,3 +233,116 @@ def arrow_diagram(A, B, pairs, w=560):
     for b, (x, y) in posB.items():
         body += C(x, y, 22, WHITE, NAVY, 2.5) + T(x, y + 6, z_(b) if not isinstance(b, str) else b, 17)
     return wrap(w, h + 10, body, "Diagrama sagital de una relación")
+
+
+# ---------------------------------------------------------------- geometría M1
+POS_OFF = {"NW": (-48, -20), "NE": (48, -20), "SW": (-48, 22), "SE": (48, 22)}
+REL = {}
+for _u in ("NW", "NE", "SW", "SE"):
+    REL[("U", _u, "U", _u)] = None
+_PAIRS = {}
+# relaciones entre (recta, cuadrante): sup=recta superior 'U', inferior 'D'
+def _rel(l1, q1, l2, q2):
+    if l1 == l2:
+        opp = {("NW", "SE"), ("SE", "NW"), ("NE", "SW"), ("SW", "NE")}
+        return "vertical" if (q1, q2) in opp else "adyacentes"
+    if l1 == "D":
+        l1, q1, l2, q2 = l2, q2, l1, q1
+    if q1 == q2:
+        return "correspondientes"
+    if (q1, q2) in {("SE", "NW"), ("SW", "NE")}:
+        return "alternos internos"
+    if (q1, q2) in {("NW", "SE"), ("NE", "SW")}:
+        return "alternos externos"
+    if (q1, q2) in {("SE", "NE"), ("SW", "NW")}:
+        return "conjugados internos"
+    return "conjugados externos"
+
+
+def par_transversal(labels, w=560):
+    """Dos paralelas cortadas por una transversal. labels: {(recta 'U'/'D', 'NW'|'NE'|'SW'|'SE'): texto}."""
+    yU, yD = 80, 180
+    x0 = 250
+    xu, xd = x0 + 0.45 * (yU - 30), x0 + 0.45 * (yD - 30)
+    body = L(50, yU, 510, yU, NAVY, 3.5) + L(50, yD, 510, yD, NAVY, 3.5) + L(x0, 30, x0 + 0.45 * 200, 230, INK, 3.5)
+    body += C(xu, yU, 5, INK, INK, 1) + C(xd, yD, 5, INK, INK, 1)
+    for (ln, q), txt in labels.items():
+        x, y = (xu, yU) if ln == "U" else (xd, yD)
+        dx, dy = POS_OFF[q]
+        body += tag(x + dx, y + dy, txt, 16)
+    body += tag(470, yU - 20, "L₁", 15) + tag(470, yD - 20, "L₂", 15)
+    return wrap(w, 260, body, "Dos rectas paralelas cortadas por una transversal")
+
+
+def tri_angles(labs, ext=None, w=560, names=("A", "B", "C")):
+    """Triángulo con tags en los ángulos: labs = {'A':..,'B':..,'C':..}; ext = texto del ángulo exterior en B."""
+    A, B, C_ = (100, 220), (400, 220), (250, 50)
+    body = P([A, B, C_], FILL)
+    if ext:
+        body += L(B[0], B[1], B[0] + 110, B[1], INK, 3.5)
+        body += tag(B[0] + 52, B[1] - 28, ext, 16)
+    body += tag(A[0] + 52, A[1] - 22, labs.get("A", ""), 16) if labs.get("A") else ""
+    body += tag(B[0] - 52, B[1] - 22, labs.get("B", ""), 16) if labs.get("B") else ""
+    body += tag(C_[0], C_[1] + 42, labs.get("C", ""), 16) if labs.get("C") else ""
+    for P_, nm, dx, dy in ((A, names[0], -16, 8), (B, names[1], 16, 8), (C_, names[2], 0, -16)):
+        body += C(P_[0], P_[1], 5, INK, INK, 1) + T(P_[0] + dx, P_[1] + dy + 6, nm, 20)
+    return wrap(w, 270, body, "Triángulo con sus ángulos")
+
+
+def tri_sides(a, b, c, labs=None, names=("A", "B", "C"), right=None, w=560):
+    """Triángulo con lados a=BC, b=CA, c=AB (a partir de las medidas) y rótulos en los lados. right: vértice con ángulo recto ('A'/'B'/'C')."""
+    import math
+    x = (b * b + c * c - a * a) / (2 * c)
+    y2 = b * b - x * x
+    if y2 <= 0:
+        raise ValueError("triángulo degenerado")
+    y = math.sqrt(y2)
+    s = min(400 / max(c, abs(x), c - x), 170 / y)
+    lo_, hi_ = min(0, x) * s, max(c, x) * s
+    A = ((w - (hi_ - lo_)) / 2 - lo_, 215)
+    B = (A[0] + c * s, 215)
+    Cc = (A[0] + x * s, 215 - y * s)
+    body = P([A, B, Cc], FILL)
+    labs = labs or {}
+    mid_ = lambda p, q: ((p[0] + q[0]) / 2, (p[1] + q[1]) / 2)
+    if labs.get("c"):
+        m = mid_(A, B); body += tag(m[0], m[1] + 26, labs["c"], 16)
+    if labs.get("a"):
+        m = mid_(B, Cc); body += tag(m[0] + 28, m[1] - 4, labs["a"], 16)
+    if labs.get("b"):
+        m = mid_(A, Cc); body += tag(m[0] - 28, m[1] - 4, labs["b"], 16)
+    if right:
+        P_ = {"A": A, "B": B, "C": Cc}[right]
+        o1 = {"A": B, "B": A, "C": A}[right]; o2 = {"A": Cc, "B": Cc, "C": B}[right]
+        def unit(p, q):
+            d = math.hypot(q[0] - p[0], q[1] - p[1]); return ((q[0] - p[0]) / d * 16, (q[1] - p[1]) / d * 16)
+        e1, e2 = unit(P_, o1), unit(P_, o2)
+        body += f'<polyline fill="none" stroke="{INK}" stroke-width="2.5" points="{P_[0] + e1[0]:.1f},{P_[1] + e1[1]:.1f} {P_[0] + e1[0] + e2[0]:.1f},{P_[1] + e1[1] + e2[1]:.1f} {P_[0] + e2[0]:.1f},{P_[1] + e2[1]:.1f}"/>'
+    for P_, nm, dx, dy in ((A, names[0], -16, 8), (B, names[1], 16, 8), (Cc, names[2], 0, -16)):
+        body += C(P_[0], P_[1], 5, INK, INK, 1) + T(P_[0] + dx, P_[1] + dy + 6, nm, 20)
+    return wrap(w, 270, body, "Triángulo con las medidas de sus lados")
+
+
+def polygon_fig(pts, labels=None, fill=None, w=560, h=280, unit_scale=None):
+    """Polígono con vértices en unidades; labels: lista de texto por lado (None = sin rótulo)."""
+    import math
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    s = unit_scale or min(400 / (max(xs) - min(xs)), (h - 100) / (max(ys) - min(ys)))
+    ox = (w - (max(xs) - min(xs)) * s) / 2 - min(xs) * s
+    oy = 50 + max(ys) * s
+    P_ = [(ox + x * s, oy - y * s) for x, y in pts]
+    body = P(P_, fill or FILL)
+    n = len(P_)
+    area2 = sum(P_[i][0] * P_[(i + 1) % n][1] - P_[(i + 1) % n][0] * P_[i][1] for i in range(n))
+    sign = 1 if area2 > 0 else -1
+    for i in range(n):
+        if labels and labels[i]:
+            p, q = P_[i], P_[(i + 1) % n]
+            mx, my = (p[0] + q[0]) / 2, (p[1] + q[1]) / 2
+            dx, dy = q[0] - p[0], q[1] - p[1]
+            d = math.hypot(dx, dy) or 1
+            nx, ny = sign * dy / d, -sign * dx / d
+            body += tag(mx + nx * 26, my + ny * 20, labels[i], 16)
+    for (px, py) in P_:
+        body += C(px, py, 4, INK, INK, 1)
+    return wrap(w, h + 30, body, "Figura plana con las medidas de sus lados")
