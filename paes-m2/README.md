@@ -22,6 +22,6 @@ Entregado (semanas 1-4 · eje Números):
 - Semana 14 · Mini ensayo Álgebra y Funciones M2 (`dist/clase-14/mini-ensayo.html`): igual estructura, con las plantillas de las clases 5-13.
 - Semana 22 · Mini ensayo Geometría M2 (`dist/clase-22/mini-ensayo.html`): igual estructura, con las plantillas de las clases 15-21.
 - Semana 28 · Mini ensayo Probabilidad y Estadística M2 (`dist/clase-28/mini-ensayo.html`): igual estructura, con las plantillas de las clases 23-27.
-- Semana 29 · Ensayo General PAES M2 (`dist/clase-29/ensayo-final.html`): nivel Experto, 40 preguntas de un banco de 500 (125 por habilidad) con plantillas de las 27 clases repartidas por igual.
+- Semana 29 · Ensayo General PAES M2 (`dist/clase-29/ensayo-final.html`): nivel Experto, 40 preguntas de un banco de 500 (125 por habilidad) con plantillas de las 27 clases repartidas por igual. Además integra `generator/extras.py`: contenidos del temario oficial DEMRE M2 sin clase propia (modelos binomial y normal, circunferencia y esfera, rectas, funciones seno/coseno, matemática financiera, sistemas 2x2 y suficiencia de datos).
 - Semana 30 · Corrección integral y estrategias finales (`dist/clase-30/`): Principiante / Avanzado / Experto sobre análisis de distractores (por qué una alternativa falsa «parece» correcta), banco de 150 por nivel.
 Para agregar un mini ensayo o una clase nueva: registrarla en `CLASES` / `MINIS` de `generator/build.py`.

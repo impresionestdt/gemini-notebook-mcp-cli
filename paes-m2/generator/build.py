@@ -80,9 +80,10 @@ def main(argv):
         if c == FINAL_WEEK:
             # todo el temario: cada clase aporta por igual (round-robin entre clases dentro de cada habilidad)
             per_class = {cl: norm(importlib.import_module(CLASES[cl][0]).BY_SKILL) for cl in CLASES}
+            per_class.update({g: norm(by_) for g, by_ in importlib.import_module("extras").GROUPS.items()})  # temario DEMRE sin clase propia
             by = {}
             for sk in SKILLS:
-                lists = [per_class[cl][sk] for cl in CLASES if sk in per_class[cl]]
+                lists = [per_class[cl][sk] for cl in per_class if sk in per_class[cl]]
                 seq = []
                 for i in range(max(len(x) for x in lists) * len(lists)):
                     seq.append(lists[i % len(lists)][(i // len(lists)) % len(lists[i % len(lists)])])
