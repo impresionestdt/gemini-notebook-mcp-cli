@@ -145,3 +145,33 @@ def two_squares(k, lab_s, lab_b):
     body = R(80, y - s1, s1, s1, FILL) + R(80 + s1 + 100, y - s2, s2, s2, FILL2)
     body += tag(80 + s1 / 2, y + 28, lab_s, 15) + tag(80 + s1 + 100 + s2 / 2, y + 28, lab_b, 15)
     return wrap(560, 270, body, "Dos cuadrados")
+
+
+def trig_tri(adj, opp, labs, ang="α", show_other=None, names=("A", "B", "C")):
+    """Triángulo rectángulo en C (abajo a la derecha). α en A (abajo a la izquierda).
+    adj: cateto adyacente a α (horizontal), opp: cateto opuesto (vertical). Sólo se usa la proporción."""
+    na, nb, nc = names
+    s = min(360 / adj, 175 / opp)
+    W, H = adj * s, opp * s
+    A, C_, B = (90, 235), (90 + W, 235), (90 + W, 235 - H)
+    body = P([A, B, C_], FILL)
+    # ángulo recto en C
+    u = 14
+    body += f'<polyline fill="none" stroke="{INK}" stroke-width="2.5" points="{C_[0] - u},{C_[1]} {C_[0] - u},{C_[1] - u} {C_[0]},{C_[1] - u}"/>'
+    # arco de α en A
+    import math
+    th = math.atan2(H, W)
+    r_ = 34
+    body += f'<path d="M {A[0] + r_} {A[1]} A {r_} {r_} 0 0 0 {A[0] + r_ * math.cos(th):.1f} {A[1] - r_ * math.sin(th):.1f}" fill="none" stroke="{ACC}" stroke-width="3.5"/>'
+    body += tag(A[0] + 58, A[1] - 12 - 6 * (H < 90), ang, 16)
+    if show_other:
+        th2 = math.pi / 2 - th
+        body += f'<path d="M {B[0]} {B[1] + r_} A {r_} {r_} 0 0 0 {B[0] - r_ * math.sin(th):.1f} {B[1] + r_ * math.cos(th):.1f}" fill="none" stroke="{NAVY}" stroke-width="3.5"/>'
+        body += tag(B[0] - 44, B[1] + 44, show_other, 16)
+    for P_ in (A, B, C_):
+        body += C(P_[0], P_[1], 5, INK, INK, 1)
+    if labs.get("adj"): body += tag((A[0] + C_[0]) / 2, 268, labs["adj"], 16)
+    if labs.get("opp"): body += tag(C_[0] + 40, (B[1] + C_[1]) / 2, labs["opp"], 16)
+    if labs.get("hyp"): body += tag(*shift(mid(A, B), -34, -22), labs["hyp"], 16)
+    body += letter(A[0] - 18, A[1] + 6, na) + letter(B[0] + 4, B[1] - 16, nb) + letter(C_[0] + 20, C_[1] + 8, nc)
+    return wrap(560, 290, body, "Triángulo rectángulo con un ángulo agudo marcado")
