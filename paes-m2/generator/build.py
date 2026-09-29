@@ -23,7 +23,8 @@ CLASES = {1: ("clase01", "Números Reales e Irracionales: propiedades y racional
           13: ("clase13", "Repaso integrado de Álgebra y Funciones M2")}
 LEVELS = [("principiante", 0), ("avanzado", 1), ("experto", 2)]
 # Mini ensayos de cierre de unidad: semana -> (título, clases que integra)
-MINIS = {4: ("MINI ENSAYO: Números M2", [1, 2, 3])}
+MINIS = {4: ("MINI ENSAYO: Números M2", [1, 2, 3]),
+         14: ("MINI ENSAYO: Álgebra y Funciones M2", [5, 6, 7, 8, 9, 10, 11, 12, 13])}
 TITULOS = {c: t for c, (_, t) in CLASES.items()}
 TITULOS.update({w: f"{t} + corrección" for w, (t, _) in MINIS.items()})
 
@@ -72,7 +73,9 @@ def main(argv):
             by = {}
             for cl in clases:
                 for sk, fs in importlib.import_module(CLASES[cl][0]).BY_SKILL.items():
-                    by.setdefault(sk, []).extend(fs)
+                    for f_ in fs:
+                        if f_ not in by.setdefault(sk, []):
+                            by[sk].append(f_)
             bank = gen_bank(by, 2, 250, seed=c * 1000 + 7)
             validate(bank, 250)
             html = page(f"Semana {c} · {titulo}", "mini", f"Semana {c}: {titulo} (20 preguntas)", bank, 20)

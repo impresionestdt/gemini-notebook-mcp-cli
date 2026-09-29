@@ -18,4 +18,5 @@ Entregado (semanas 1-4 · eje Números):
 - Clases 1, 2 y 3: Principiante / Avanzado / Experto, banco de 150 por nivel, 10 por intento (`dist/clase-0N/`).
 - Semana 4 · Mini ensayo Números M2 (`dist/clase-04/mini-ensayo.html`): nivel Experto, banco de 250 (50 por habilidad,
   mezcla las plantillas de las clases 1-3 en nivel Experto), 20 por intento.
+- Semana 14 · Mini ensayo Álgebra y Funciones M2 (`dist/clase-14/mini-ensayo.html`): igual estructura, con las plantillas de las clases 5-13.
 Para agregar un mini ensayo o una clase nueva: registrarla en `CLASES` / `MINIS` de `generator/build.py`.
