@@ -37,7 +37,8 @@ LEVELS = [("principiante", 0), ("avanzado", 1), ("experto", 2)]
 # Mini ensayos de cierre de unidad: semana -> (título, clases que integra)
 MINIS = {4: ("MINI ENSAYO: Números M2", [1, 2, 3]),
          14: ("MINI ENSAYO: Álgebra y Funciones M2", [5, 6, 7, 8, 9, 10, 11, 12, 13]),
-         22: ("MINI ENSAYO: Geometría M2", [15, 16, 17, 18, 19, 20, 21])}
+         22: ("MINI ENSAYO: Geometría M2", [15, 16, 17, 18, 19, 20, 21]),
+         28: ("MINI ENSAYO: Probabilidad y Estadística M2", [23, 24, 25, 26, 27])}
 TITULOS = {c: t for c, (_, t) in CLASES.items()}
 TITULOS.update({w: f"{t} + corrección" for w, (t, _) in MINIS.items()})
 

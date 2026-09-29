@@ -20,4 +20,5 @@ Entregado (semanas 1-4 · eje Números):
   mezcla las plantillas de las clases 1-3 en nivel Experto), 20 por intento.
 - Semana 14 · Mini ensayo Álgebra y Funciones M2 (`dist/clase-14/mini-ensayo.html`): igual estructura, con las plantillas de las clases 5-13.
 - Semana 22 · Mini ensayo Geometría M2 (`dist/clase-22/mini-ensayo.html`): igual estructura, con las plantillas de las clases 15-21.
+- Semana 28 · Mini ensayo Probabilidad y Estadística M2 (`dist/clase-28/mini-ensayo.html`): igual estructura, con las plantillas de las clases 23-27.
 Para agregar un mini ensayo o una clase nueva: registrarla en `CLASES` / `MINIS` de `generator/build.py`.
