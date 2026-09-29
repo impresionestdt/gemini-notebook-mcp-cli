@@ -8,7 +8,7 @@
 :root{--primary:__PRIMARY__;--accent:__ACCENT__;--level:__LEVEL_COLOR__;--ink:#0F172A;--bg:#F8FAFC;--card:#fff;--ok:#166534;--bad:#991B1B;--line:#CBD5E1}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.45}
-header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:5px solid var(--level);display:flex;align-items:center;gap:16px;padding:8px 16px;flex-wrap:wrap}
+header{position:sticky;top:0;z-index:5;background:#fff;border-top:6px solid var(--primary);border-bottom:5px solid var(--level);display:flex;align-items:center;gap:16px;padding:8px 16px;flex-wrap:wrap}
 .logo{height:92px;width:auto;flex:0 0 auto}
 .logo img{height:100%;width:auto;display:block}
 @media(max-width:640px){header{position:static}.logo{height:80px}}
@@ -42,7 +42,7 @@ table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--line);pad
 <header>
   <div class="logo" aria-label="Academia Mirza Cortés">__LOGO__</div>
   <span class="badge">__LEVEL_NAME__</span>
-  <span style="font-weight:700">__SUBTITLE__</span>
+  <span style="font-weight:800;color:var(--primary)">__SUBTITLE__</span>
   <span class="meta" id="meta"></span>
 </header>
 <main><div class="bar"><i id="bar"></i></div><div id="app" class="card" aria-live="polite"></div></main>

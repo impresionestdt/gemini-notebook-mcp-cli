@@ -1,6 +1,6 @@
 {
-  "primary": "#4C1D75",
-  "accent": "#B45F1E",
+  "primary": "#4B2363",
+  "accent": "#B37D48",
   "levels": {
     "principiante": {
       "name": "Principiante",
@@ -23,5 +23,5 @@
       "color": "#111827"
     }
   },
-  "_nota": "Colores tomados del logo oficial: morado y cobre/dorado."
+  "_nota": "Colores corporativos: morado #4B2363 y dorado #B37D48 (medios del logo oficial); apoyos: morado oscuro #2A113F, morado claro #7F4896, bronce #53321D, dorado claro #EBD09D."
 }
